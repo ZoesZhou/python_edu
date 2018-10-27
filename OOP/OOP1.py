@@ -213,38 +213,217 @@ import random
 #     te.celsius()
 
 
-class ShoppingCar:
-    def __init__(self, total=99):
-        self.total = total
-        self.left = total
-        self.things_kind = []  # {'shoes':1}
-
-    def add_items(self, items):  # items传入的是Things的实例
-        self.left = self.left - items.number
-        self.things_kind.append({'name': items.name, 'number': items.number})
-        print('购物车还可以放{}件, 当前有{}件，'
-              '是{}'.format(self.left, len(self.things_kind), items.name))
-
-    def get_info(self):
-        pass
-
-
-class Things:
-    def __init__(self, name, number):
-        self.name = name
-        self.number = number
-
-
-sc = ShoppingCar(99)
-th1 = Things('shoes', 1)
-sc.add_items(th1)
-
-th2 = Things('bed', 1)
-sc.add_items(th2)
-
-
+# class ShoppingCar:
+#     def __init__(self, total=99):
+#         self.total = total
+#         self.left = total
+#         self.things_kind = []  # {'shoes':1}
+#
+#     def add_items(self, items):  # items传入的是Things的实例
+#         self.left = self.left - items.number
+#         self.things_kind.append({'name': items.name, 'number': items.number})
+#         print('购物车还可以放{}件, 当前有{}件，'
+#               '是{}'.format(self.left, len(self.things_kind), items.name))
+#
+#     def get_info(self):
+#         pass
+#
+#
+# class Things:
+#     def __init__(self, name, number):
+#         self.name = name
+#         self.number = number
+#
+#
+# sc = ShoppingCar(99)
+# th1 = Things('shoes', 1)
+# sc.add_items(th1)
+#
+# th2 = Things('bed', 1)
+# sc.add_items(th2)
 
 
+# class Point:
+#     def __init__(self, x, y):
+#         self.x = x
+#         self.y = y
+#
+#     def __str__(self):
+#         return 'Point({}, {})'.format(self.x, self.y)
+#
+#     def show(self):
+#         print(self.x, self.y)
+#
+#
+# p = Point(4, 5)
+# print(p)
+# print(p.__dict__)
+# p.__dict__['y'] = 1
+# print(p.__dict__)
+# p.z = 10
+# print(p.__dict__)
+# print(dir(p))  # ordered list
+# print(p.__dir__())  # list
+
+
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __str__(self):
+        return 'Point({}, {})'.format(self.x, self.y)
+
+    def show(self):
+        print(self)
+
+
+p1 = Point(4, 5)
+p2 = Point(10, 10)
+# print(getattr(p1, '__dict__'))
+# if hasattr(p1, 'show'):
+#     getattr(p1, 'show')()
+
+# if not hasattr(Point, 'add'):  # 为类增加方法
+#     setattr(Point, 'add', lambda self, other: Point(self.x + other.x, self.y + other.y))
+# print(Point.add)
+# print(p1.add)
+# print(p1.add(p2))
+
+# for i in dir(p1):
+    # print(type(i), i)
+    # print(getattr(p1, i))
+
+
+# setattr(p1, 'show1', lambda self: print(self, '======'))
+#
+# p1.show1(p1)
+# print(p1.__dict__)
+# print(Point.__dict__)
+
+
+# if not hasattr(p1, 'sub'):
+#     setattr(p1, 'sub', lambda self, other: Point(self.x - other.x, self.y - other.y))
+#
+# print(p1.sub(p1, p1))
+
+
+# class Dispatcher:
+#     def __init__(self):
+#         pass
+#
+#     def reg(self, name, fn):
+#         setattr(self, name, fn)
+#
+#     def run(self):
+#         while True:
+#             cmd = input('>>>').strip()
+#             if cmd == 'quit':
+#                 break
+#             getattr(self, cmd, lambda : print('Unknown cmd {}'.format(cmd)))()
+#
+#
+# def add(x=4, y=5):
+#     print(x + y)
+#
+#
+# d = Dispatcher()
+# d.reg('a', add)
+#
+# # d.run()
+# print(d.__dict__)
+
+
+# class Dispatcher:
+#     def __init__(self):
+#         pass
+#
+#     def reg(self, name):
+#         def _reg(fn):
+#             setattr(self, name, fn)
+#             return fn
+#         return _reg
+#
+#     def run(self):
+#         while True:
+#             cmd = input('>>>').strip()
+#             if cmd == 'quit':
+#                 break
+#             getattr(self, cmd, lambda : print('Unknown cmd {}'.format(cmd)))()
+#
+#
+# d = Dispatcher()
+#
+#
+# @d.reg('a')  # add = d.reg(a)(add)
+# def add(x=4, y=5):
+#     print(x + y)
+#
+#
+# # d.run()
+# print(d.__dict__)
+# # print(Dispatcher.__dict__)
+
+
+# class Base:
+#     n = 0
+#
+#
+# class Point(Base):
+#     z = 6
+#
+#     def __init__(self, x, y):
+#         self.x = x
+#         self.y = y
+#
+#     def show(self):
+#         print(self.x, self.y)
+#
+#     def __getattr__(self, item):
+#         return 'missing {}'.format(item)
+#
+#
+# p1 = Point(4, 5)
+# print(p1.x)
+# print(p1.z)
+# print(p1.n)
+# print(p1.t)
+
+
+class Base:
+    n = 0
+
+
+class Point(Base):
+    z = 6
+    d = {}
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def show(self):
+        print(self.x, self.y)
+
+    def __getattribute__(self, item):
+        print('getattribute', item)
+        return object.__getattribute__(self, item)
+
+    def __getattr__(self, item):  # 在实例字典和类字典找不到，触发
+        print('====', item)
+        return self.d[item]
+        # return 'missing {}'.format(item)
+
+    def __setattr__(self, key, value):  # 拦截对实例属性的赋值
+        print('setattr {} = {}'.format(key, value))
+        self.d[key] = value  # 保存到类属性中，实例字典为空
+
+
+p = Point(4, 5)
+print(p.y)
+print(p.__dict__)
+# print(Point.__dict__)
+print(p.d)
 
 
 
@@ -261,16 +440,60 @@ sc.add_items(th2)
 
 
 
-    # @property
-    # def add_car(self):
-    #     return self.__mark, self.__color, self.__price, self.__speed
-    #
-    # @add_car.setter
-    # def add_car(self, mark, color, price, speed):
-    #     self.__mark = mark
-    #     self.__color = color
-    #     self.__price = price
-    #     self.__speed = speed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

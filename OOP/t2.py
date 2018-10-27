@@ -5,3 +5,8 @@ class Person:
         return ret
 
 
+# import json.encoder
+from json import encoder
+
+
+print(dir())
